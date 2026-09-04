@@ -6,7 +6,6 @@ import {
   DocumentPdfRegular,
   DocumentRegular,
   EditRegular,
-  ErrorCircle20Filled,
   FolderRegular,
   OpenRegular,
   PeopleRegular,
@@ -50,6 +49,19 @@ import {
   TagPickerOption,
   TagPickerProps,
   Tag,
+  Button,
+  TeachingPopover,
+  TeachingPopoverBody,
+  TeachingPopoverFooter,
+  TeachingPopoverHeader,
+  TeachingPopoverSurface,
+  TeachingPopoverTitle,
+  TeachingPopoverTrigger,
+  Toolbar,
+  ToolbarButton,
+  Tree,
+  TreeItem,
+  TreeItemLayout,
 } from '@fluentui/react-components';
 import { useGamepadNavigationGroup } from '@fluentui-contrib/react-gamepad-navigation';
 import type { JSXElement } from '@fluentui/react-components';
@@ -264,6 +276,11 @@ export const ComposedElements = () => {
   const { gamepadNavDOMAttributes } = useGamepadNavigationGroup({
     focusFirstElement: true,
   });
+  const { gamepadNavDOMAttributes: teachingPopoverGamepadNavDOMAttributes } =
+    useGamepadNavigationGroup({
+      axis: 'horizontal',
+      circular: true,
+    });
 
   const styles = useStyles();
   const CalendarMonth = bundleIcon(CalendarMonthRegular, CalendarMonthRegular);
@@ -480,8 +497,7 @@ export const ComposedElements = () => {
         TagPicker
         <span className={styles.support}>
           Support:
-          <ErrorCircle20Filled color="#fce100" />
-          {/* DpadRight doesn't focus Tagpicker when already focusing at last tag*/}
+          <CheckmarkCircle20Filled color="#6bb700" />
         </span>
       </h3>
       <div className={styles.row}>
@@ -534,6 +550,74 @@ export const ComposedElements = () => {
             </TagPickerList>
           </TagPicker>
         </Field>
+      </div>
+      <hr />
+      <h3>
+        TeachingPopover
+        <span className={styles.support}>
+          Support:
+          <CheckmarkCircle20Filled color="#6bb700" />
+        </span>
+      </h3>
+      <div className={styles.row}>
+        <TeachingPopover>
+          <TeachingPopoverTrigger>
+            <Button>Open teaching popover</Button>
+          </TeachingPopoverTrigger>
+          <TeachingPopoverSurface
+            {...teachingPopoverGamepadNavDOMAttributes}
+          >
+            <TeachingPopoverHeader>Gamepad navigation</TeachingPopoverHeader>
+            <TeachingPopoverBody>
+              <TeachingPopoverTitle>
+                Navigate the popover actions
+              </TeachingPopoverTitle>
+              Use the D-pad or left stick to move between the footer buttons.
+            </TeachingPopoverBody>
+            <TeachingPopoverFooter primary="Learn more" secondary="Got it" />
+          </TeachingPopoverSurface>
+        </TeachingPopover>
+      </div>
+      <hr />
+      <h3>
+        Toolbar
+        <span className={styles.support}>
+          Support:
+          <CheckmarkCircle20Filled color="#6bb700" />
+        </span>
+      </h3>
+      <div className={styles.row}>
+        <Toolbar aria-label="Formatting">
+          <ToolbarButton>Cut</ToolbarButton>
+          <ToolbarButton>Copy</ToolbarButton>
+          <ToolbarButton>Paste</ToolbarButton>
+        </Toolbar>
+      </div>
+      <hr />
+      <h3>
+        Tree
+        <span className={styles.support}>
+          Support:
+          <CheckmarkCircle20Filled color="#6bb700" />
+        </span>
+      </h3>
+      <div className={styles.row}>
+        <Tree aria-label="Gamepad navigation tree">
+          <TreeItem itemType="branch" value="documents">
+            <TreeItemLayout>Documents</TreeItemLayout>
+            <Tree>
+              <TreeItem itemType="leaf" value="report">
+                <TreeItemLayout>Report</TreeItemLayout>
+              </TreeItem>
+              <TreeItem itemType="leaf" value="notes">
+                <TreeItemLayout>Notes</TreeItemLayout>
+              </TreeItem>
+            </Tree>
+          </TreeItem>
+          <TreeItem itemType="leaf" value="downloads">
+            <TreeItemLayout>Downloads</TreeItemLayout>
+          </TreeItem>
+        </Tree>
       </div>
     </div>
   );

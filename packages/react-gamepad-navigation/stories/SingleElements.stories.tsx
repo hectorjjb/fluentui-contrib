@@ -9,7 +9,6 @@ import {
   CutRegular,
   DismissCircle20Filled,
   Edit20Regular,
-  ErrorCircle20Filled,
   TextAlignCenterRegular,
   TextAlignLeftRegular,
   TextAlignRightRegular,
@@ -437,7 +436,7 @@ export const SingleElements = () => {
         Slider
         <span className={styles.support}>
           Support:
-          <DismissCircle20Filled color="#c50f1f" />
+          <CheckmarkCircle20Filled color="#6bb700" />
         </span>
       </h3>
       <div className={styles.row}>
@@ -459,7 +458,7 @@ export const SingleElements = () => {
         Spin Button
         <span className={styles.support}>
           Support:
-          <DismissCircle20Filled color="#c50f1f" />
+          <CheckmarkCircle20Filled color="#6bb700" />
         </span>
       </h3>
       <div className={styles.row}>
@@ -674,7 +673,7 @@ export const SingleElements = () => {
         Radio Group
         <span className={styles.support}>
           Support:
-          <ErrorCircle20Filled color="#fce100" />
+          <CheckmarkCircle20Filled color="#6bb700" />
         </span>
       </h3>
       <div className={styles.row}>

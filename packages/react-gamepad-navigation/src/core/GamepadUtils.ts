@@ -22,6 +22,14 @@ export const isComboboxElement = (
   return element?.getAttribute('role') === 'combobox';
 };
 
+export const isSliderElement = (
+  element: Element | null | undefined
+): element is HTMLInputElement => {
+  return (
+    element?.tagName === 'INPUT' && element.getAttribute('type') === 'range'
+  );
+};
+
 export const isMenuItemElement = (
   element: Element | null | undefined
 ): boolean => {
@@ -33,6 +41,22 @@ export const isRadioElement = (
 ): element is HTMLInputElement => {
   return (
     element?.tagName === 'INPUT' && element.getAttribute('type') === 'radio'
+  );
+};
+
+export const handlesDirectionalKeyboardEvents = (
+  element: Element | null | undefined
+): boolean => {
+  if (!element) {
+    return false;
+  }
+
+  const role = element.getAttribute('role');
+  return (
+    role === 'combobox' ||
+    role === 'spinbutton' ||
+    role === 'treeitem' ||
+    element.closest('[role="toolbar"], [role="listbox"]') !== null
   );
 };
 

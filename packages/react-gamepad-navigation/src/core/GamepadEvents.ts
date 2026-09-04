@@ -1,8 +1,10 @@
 import { MoverMoveFocusEvent } from '@fluentui/react-tabster';
 import {
+  handlesDirectionalKeyboardEvents,
   isComboboxElement,
   isMenuItemElement,
   isRadioElement,
+  isSliderElement,
   shouldSubmitForm,
 } from './GamepadUtils';
 import { getMoverKeyToKeyboardKeyMapping } from './GamepadMappings';
@@ -51,6 +53,66 @@ export const emitSyntheticKeyboardEvent = (
   activeElement?.dispatchEvent(keyboardEvent);
 };
 
+const emitSyntheticDirectionalKeyboardEvent = (
+  key: KeyboardKey,
+  targetDocument: Document
+): void => {
+  emitSyntheticKeyboardEvent('keydown', key, true, targetDocument);
+  emitSyntheticKeyboardEvent('keyup', key, true, targetDocument);
+};
+
+const moveRadioSelection = (
+  radio: HTMLInputElement,
+  key: KeyboardKey
+): boolean => {
+  const radioGroup = radio.closest('[role="radiogroup"]');
+  if (!radioGroup) {
+    return false;
+  }
+
+  const radios = Array.from(
+    radioGroup.querySelectorAll<HTMLInputElement>('input[type="radio"]')
+  ).filter((item) => !item.disabled);
+  const currentIndex = radios.indexOf(radio);
+  if (currentIndex === -1 || radios.length < 2) {
+    return false;
+  }
+
+  const offset =
+    key === KeyboardKey.ArrowLeft || key === KeyboardKey.ArrowUp ? -1 : 1;
+  const nextIndex = (currentIndex + offset + radios.length) % radios.length;
+  const nextRadio = radios[nextIndex];
+
+  nextRadio.focus();
+  nextRadio.click();
+  return true;
+};
+
+const stepSlider = (
+  slider: HTMLInputElement,
+  key: KeyboardKey
+): boolean => {
+  const shouldIncrement =
+    key === KeyboardKey.ArrowRight || key === KeyboardKey.ArrowUp;
+
+  if (slider.step === 'any') {
+    const currentValue = Number(slider.value);
+    const min = slider.min === '' ? 0 : Number(slider.min);
+    const max = slider.max === '' ? 100 : Number(slider.max);
+    slider.value = String(
+      Math.min(max, Math.max(min, currentValue + (shouldIncrement ? 1 : -1)))
+    );
+  } else if (shouldIncrement) {
+    slider.stepUp();
+  } else {
+    slider.stepDown();
+  }
+
+  slider.dispatchEvent(new Event('input', { bubbles: true }));
+  slider.dispatchEvent(new Event('change', { bubbles: true }));
+  return true;
+};
+
 export const emitSyntheticMouseEvent = (
   event: 'mousedown' | 'mouseup' | 'click',
   bubbles: boolean,
@@ -87,12 +149,22 @@ export const emitSyntheticMoverMoveFocusEvent = (
   targetDocument: Document
 ): void => {
   const activeElement = targetDocument.activeElement;
-  if (isComboboxElement(activeElement)) {
-    const button = getMoverKeyToKeyboardKeyMapping(key);
-    emitSyntheticKeyboardEvent('keydown', button, true, targetDocument);
-  } else {
-    activeElement?.dispatchEvent(new MoverMoveFocusEvent({ key }));
+  const keyboardKey = getMoverKeyToKeyboardKeyMapping(key);
+
+  if (isRadioElement(activeElement)) {
+    if (moveRadioSelection(activeElement, keyboardKey)) {
+      return;
+    }
+  } else if (isSliderElement(activeElement)) {
+    if (stepSlider(activeElement, keyboardKey)) {
+      return;
+    }
+  } else if (handlesDirectionalKeyboardEvents(activeElement)) {
+    emitSyntheticDirectionalKeyboardEvent(keyboardKey, targetDocument);
+    return;
   }
+
+  activeElement?.dispatchEvent(new MoverMoveFocusEvent({ key }));
 };
 
 export const emitSyntheticGroupperMoveFocusEvent = (
@@ -106,8 +178,6 @@ export const emitSyntheticGroupperMoveFocusEvent = (
 
     if (isComboboxElement(activeElement)) {
       emitSyntheticKeyboardEvent('keydown', action, true, targetDocument);
-    } else if (isRadioElement(activeElement)) {
-      activeElement.checked = !activeElement.checked;
     } else {
       emitSyntheticMouseEvent('click', true, targetDocument);
     }

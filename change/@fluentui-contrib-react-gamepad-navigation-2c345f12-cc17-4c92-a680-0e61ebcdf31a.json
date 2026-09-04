@@ -1,0 +1,7 @@
+{
+  "type": "minor",
+  "comment": "add gamepad navigation support for more Fluent UI components",
+  "packageName": "@fluentui-contrib/react-gamepad-navigation",
+  "email": "hectorjimenez@outlook.com",
+  "dependentChangeType": "patch"
+}

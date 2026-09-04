@@ -46,10 +46,10 @@ yarn add @fluentui-contrib/react-gamepad-navigation
 | Input      | ✅ Supported       |
 | Link       | ✅ Supported       |
 | Menu       | ✅ Supported       |
-| RadioGroup | ⚠️ Partial Support |
+| RadioGroup | ✅ Supported       |
 | Select     | ⛔ Not Supported   |
-| Slider     | ⛔ Not Supported   |
-| SpinButton | ⛔ Not Supported   |
+| Slider     | ✅ Supported       |
+| SpinButton | ✅ Supported       |
 | Switch     | ✅ Supported       |
 | Textarea   | ✅ Supported       |
 
@@ -66,10 +66,15 @@ yarn add @fluentui-contrib/react-gamepad-navigation
 | InteractionTag  | ✅ Supported       |
 | SwatchPicker    | ✅ Supported       |
 | TabList         | ✅ Supported       |
-| TagPicker       | ⚠️ Partial Support |
-| TeachingPopover | ?                  |
-| Toolbar         | ?                  |
-| Tree            | ?                  |
+| TagPicker       | ✅ Supported       |
+| TeachingPopover | ✅ Supported       |
+| Toolbar         | ✅ Supported       |
+| Tree            | ✅ Supported       |
+
+> [!NOTE]
+> `TeachingPopoverSurface` is rendered in a portal. Apply a second set of
+> `gamepadNavDOMAttributes` directly to the surface to enable directional
+> navigation between its actions.
 
 ## Usage
 
